@@ -1,0 +1,2624 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta charset="utf-8">
+<title>Revealer</title>
+
+<style>
+body
+{
+    background: #323639;
+    color: white;
+    font-family: sans-serif;
+}
+
+button
+{
+    background-color: #146dff;
+    border: none;
+    border-radius: 5px;
+    color: #ffffff;
+    padding: 10px 15px 10px 15px;
+    font-family: "Verdana";
+    font-size: 24px;
+    cursor: pointer;
+    transition: 0.15s;
+    outline: none;
+}
+
+button:hover
+{
+    background-color: #54adff;
+    cursor: pointer;
+}
+
+button:disabled
+{
+    background-color: #77abff;
+    cursor: not-allowed;
+}
+
+.controller-container
+{
+    height: 35px;
+    border: 1px solid #606060;
+}
+
+.labels
+{
+    display: inline-block;
+    width: 240px;
+    font-size: 20px;
+    margin-left: 5px;
+}
+
+.controller
+{
+    display: inline-block;
+    width: 400px;
+}
+
+/* only the required characters */
+@font-face
+{
+    font-family: RobotoMono;
+    src: url(data:application/font-woff;base64,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) format('woff');
+    font-weight: bold;
+    font-style: normal;
+}
+
+a
+{
+    color: #32b2ff;
+}
+
+input[type=number]::-webkit-outer-spin-button,
+input[type=number]::-webkit-inner-spin-button
+{
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+</style>
+</head>
+<body>
+<div id="multi_info" style="display: none; position: fixed; top: 0px; left: 0px; width: 100%; height: 100%; background: rgba(0,0,0,0.5);">
+    <div style="position: fixed; width: calc(100% - 40px); max-width: 1200px; background: black; margin: 20px; border-radius: 5px;">
+        <div style="font-size: 20px; padding: 5px; margin: 20px;">When creating a multi-revealer, 3 or more revealers will be created. The secret will be then encrypted with the combination of all those revealers. That means that you will need all of those revealers and the encrypted secret to decrypt them.<br><br>The secret can only be decrypted if you have all the revealers (and the encrypted secret of course). If any of them are missing, then it is impossible to decrypt the secret.<br><br>The revealer combining works by overlapping them, and for each overlapping square counting how many of them are white. If their count is an even number, then in the combined revealer the corresponding square will be black. If it is odd, then that square will be white. Combining the revealers create a brand new revealer, which then can be used to encrypt your secret.<br>Decrypting works the same way: combining all the revealers and the encrypted secret will result in an image of the decrypted secret.<br><br>Note: this does not work with physical revealers, since you cannot overlap them this way.<br>Also note: this is not an official method of generating revealers, so currently there are no other implementations for decoding multi-revealers. You can save this page for later, it is a single html file (just press CTRL-S and save it).<br>Alternatively, you can use an image editing software (e.g. Photoshop) to overlay the images, and set the blending mode to Difference for each layer. All images together will reveal the decrypted secret.</div>
+        <button onclick="ShowMultiInfo(false)" style="margin: 20px;">OK</button>
+    </div>
+</div>
+<div id="font_preloader" style="position: absolute; left: -100px;">
+    <div style="font-family: RobotoMono">&nbsp;</div>
+</div>
+<div id="start_div">
+    <div style="font-size: 20px; margin: 10px 0px;">Enter a revealer id below, or create a new one</div>
+    <input id="revealer_id_input" placeholder="1234 ABCD ...." style="padding: 2px; font-size: 25px; width: 800px;">
+    <br>
+    <button onclick="EncryptWithRevealer(false)" style="margin-top: 10px; margin-right: 10px; width: 808px;">Encrypt with this revealer</button>
+    <br>
+    <div id="error_text" style="margin-top: 10px; font-size: 25px; color: red;">&nbsp;</div>
+    <button onclick="EncryptWithRevealer(true)" style="margin-top: 40px; width: 450px;">Create a new revealer</button>
+    <br>
+    <button onclick="ShowMultiSetup()" style="margin-top: 10px; width: 450px;">Create a new multi-revealer</button><a href="javascript:ShowMultiInfo(true)" style="margin-left: 10px; font-size: 20px;">What's this?</a>
+    <br>
+    <button style="margin-top: 50px; width: 450px;" onclick="ShowDecrypt()">Decrypt revealer(s)</button>
+</div>
+<div id="preview" style="display: none;">
+    <div id="preview_text" style="margin: 10px 0px; font-size: 25px;"></div>
+    <div style="display: table;">
+        <textarea placeholder="Enter your text here" style="width: 600px; height: 300px; font-size: 30px; resize: none;" id="textarea" oninput="TextChanged()"></textarea>
+        <div style="font-weight: bold; margin: 10px 0px;">Note: some of the features below may not work in all browsers</div>
+        <div class="controller-container">
+            <div class="labels">Font size</div>
+            <input class="controller" id="fontsize_slider" type="range" min="1" max="500" value="120" oninput="TextChanged()">
+        </div>
+        <div class="controller-container">
+            <div class="labels">Line height</div>
+            <input class="controller" id="lineheight_slider" type="range" min="10" max="300" value="130" oninput="TextChanged()">
+        </div>
+        <div class="controller-container">
+            <div class="labels">Text alpha threshold</div>
+            <input class="controller" id="alpha_slider" type="range" min="0" max="254" value="200" oninput="TextChanged()">
+        </div>
+        <div class="controller-container">
+            <div class="labels">Font family</div>
+            <input class="controller" id="fontfamily_input" value="verdana" oninput="TextChanged()">
+        </div>
+        <div class="controller-container">
+            <div class="labels">Letter spacing</div>
+            <input class="controller" id="letterspacing_slider" type="range" min="-100" max="100" value="-2" oninput="TextChanged()">
+        </div>
+        <div class="controller-container">
+            <div class="labels">Italic</div>
+            <input class="controller" id="font_italic" type="checkbox" onchange="TextChanged()">
+        </div>
+        <div class="controller-container">
+            <div class="labels">Bold</div>
+            <input class="controller" id="font_weight_selector" type="checkbox" onchange="TextChanged()">
+        </div>
+        <div class="controller-container">
+            <div class="labels">Automatic line break</div>
+            <input class="controller" id="word_wrap" type="checkbox" checked onchange="TextChanged()">
+        </div>
+        <div class="controller-container">
+            <div class="labels">Top border</div>
+            <input class="controller" id="border_top_size" type="range" min="-10" max="30" value="2" oninput="TextChanged()">
+        </div>
+        <div class="controller-container">
+            <div class="labels">Side border</div>
+            <input class="controller" id="border_side_size" type="range" min="-10" max="30" value="2" oninput="TextChanged()">
+        </div>
+        
+        <div style="margin-top: 10px;">
+            <button onclick="GoBack()">Back</button>
+            <button style="margin-left: 10px;" onclick="Create()">Encrypt text</button>
+        </div>
+    </div>
+    
+    <div style="position: absolute; left: 700px; top: 10px;">
+        <div style="font-size: 20px; margin-bottom: 10px;">Preview:</div>
+        <canvas id="preview_canvas" imageSmoothingEnabled="false" style="transform-origin: 0 0; transform: scale(4); letter-spacing: -0.2px;"></canvas>
+    </div>
+</div>
+<div id="result" style="display: none;">
+    <div style="margin-bottom: 10px;">
+        <button onclick="GoBack()">Back</button>
+        <button style="margin-left: 10px;" onclick="Reset()">Start over</button>
+    </div>
+    <br>
+    <div id="result_container"></div>
+</div>
+<div id="multi_setup" style="display: none;">
+    <div style="display: inline; font-size: 20px;">Create this many revealers: </div>
+    <input id="multi_count" type="number" style="display: inline; font-size: 20px; width: 50px; margin: 0px 5px;" value="3" oninput="MultiCountChanged(event.target)"><div style="display: inline; font-size: 20px;"> (must be odd)</div>
+    <br>
+    <button id="multi_button_new" style="margin-top: 20px; margin-bottom: 40px; width: 348px;" onclick="PreviewMultiRevealers(true)">Create 3 new revealers</button>
+    <br>
+    <div style="font-size: 20px; margin-bottom: 10px;">Or enter a list of already existing revealers (one per line):<br>If you enter less revealers than the number you selected, then the remaining ones will be generated automatically.</div>
+    <textarea id="multi_existing_revealers" style="width: 600px; height: 150px; font-size: 20px; resize: none;" oninput="MultiExistingChanged(event.target)"></textarea>
+    <br>
+    <button id="multi_button_existing" style="margin-top: 10px; margin-bottom: 20px; width: 606px;" onclick="PreviewMultiRevealers(false)">Create 3 new revealers (you did not enter any revealers to use)</button>
+    <br>
+    <div id="error_text_multi" style="font-size: 25px; color: red;">&nbsp;</div>
+    <button style="margin-top: 30px;" onclick="GoBack()">Back</button>
+</div>
+<div id="decrypt" style="display: none;">
+    <input id="decrypt_file_selector" type="file" accept="image/*" multiple style="display: none;" onclick="this.value=null" onchange="FilesSelected(this.files)">
+    <button onclick="document.getElementById('decrypt_file_selector').click()" style="margin-bottom: 10px;">Select image files</button>
+    <br>
+    <canvas id="decrypt_canvas" style="width: 1014px; height: 642px; border: 1px solid black;"></canvas>
+    <canvas id="decrypt_canvas_temp" style="display: none;"></canvas>
+    <br>
+    <button style="margin-top: 30px;" onclick="GoBack()">Back</button>
+</div>
+
+<script>
+// crypto-js from https://github.com/brix/crypto-js
+
+/**
+ * CryptoJS core components.
+ */
+var CryptoJS = CryptoJS || (function (Math, undefined) {
+    /*
+     * Local polyfil of Object.create
+     */
+    var create = Object.create || (function () {
+        function F() {}
+
+        return function (obj) {
+            var subtype;
+
+            F.prototype = obj;
+
+            subtype = new F();
+
+            F.prototype = null;
+
+            return subtype;
+        };
+    }())
+
+    /**
+     * CryptoJS namespace.
+     */
+    var C = {};
+
+    /**
+     * Library namespace.
+     */
+    var C_lib = C.lib = {};
+
+    /**
+     * Base object for prototypal inheritance.
+     */
+    var Base = C_lib.Base = (function () {
+
+
+        return {
+            /**
+             * Creates a new object that inherits from this object.
+             *
+             * @param {Object} overrides Properties to copy into the new object.
+             *
+             * @return {Object} The new object.
+             *
+             * @static
+             *
+             * @example
+             *
+             *     var MyType = CryptoJS.lib.Base.extend({
+             *         field: 'value',
+             *
+             *         method: function () {
+             *         }
+             *     });
+             */
+            extend: function (overrides) {
+                // Spawn
+                var subtype = create(this);
+
+                // Augment
+                if (overrides) {
+                    subtype.mixIn(overrides);
+                }
+
+                // Create default initializer
+                if (!subtype.hasOwnProperty('init') || this.init === subtype.init) {
+                    subtype.init = function () {
+                        subtype.$super.init.apply(this, arguments);
+                    };
+                }
+
+                // Initializer's prototype is the subtype object
+                subtype.init.prototype = subtype;
+
+                // Reference supertype
+                subtype.$super = this;
+
+                return subtype;
+            },
+
+            /**
+             * Extends this object and runs the init method.
+             * Arguments to create() will be passed to init().
+             *
+             * @return {Object} The new object.
+             *
+             * @static
+             *
+             * @example
+             *
+             *     var instance = MyType.create();
+             */
+            create: function () {
+                var instance = this.extend();
+                instance.init.apply(instance, arguments);
+
+                return instance;
+            },
+
+            /**
+             * Initializes a newly created object.
+             * Override this method to add some logic when your objects are created.
+             *
+             * @example
+             *
+             *     var MyType = CryptoJS.lib.Base.extend({
+             *         init: function () {
+             *             // ...
+             *         }
+             *     });
+             */
+            init: function () {
+            },
+
+            /**
+             * Copies properties into this object.
+             *
+             * @param {Object} properties The properties to mix in.
+             *
+             * @example
+             *
+             *     MyType.mixIn({
+             *         field: 'value'
+             *     });
+             */
+            mixIn: function (properties) {
+                for (var propertyName in properties) {
+                    if (properties.hasOwnProperty(propertyName)) {
+                        this[propertyName] = properties[propertyName];
+                    }
+                }
+
+                // IE won't copy toString using the loop above
+                if (properties.hasOwnProperty('toString')) {
+                    this.toString = properties.toString;
+                }
+            },
+
+            /**
+             * Creates a copy of this object.
+             *
+             * @return {Object} The clone.
+             *
+             * @example
+             *
+             *     var clone = instance.clone();
+             */
+            clone: function () {
+                return this.init.prototype.extend(this);
+            }
+        };
+    }());
+
+    /**
+     * An array of 32-bit words.
+     *
+     * @property {Array} words The array of 32-bit words.
+     * @property {number} sigBytes The number of significant bytes in this word array.
+     */
+    var WordArray = C_lib.WordArray = Base.extend({
+        /**
+         * Initializes a newly created word array.
+         *
+         * @param {Array} words (Optional) An array of 32-bit words.
+         * @param {number} sigBytes (Optional) The number of significant bytes in the words.
+         *
+         * @example
+         *
+         *     var wordArray = CryptoJS.lib.WordArray.create();
+         *     var wordArray = CryptoJS.lib.WordArray.create([0x00010203, 0x04050607]);
+         *     var wordArray = CryptoJS.lib.WordArray.create([0x00010203, 0x04050607], 6);
+         */
+        init: function (words, sigBytes) {
+            words = this.words = words || [];
+
+            if (sigBytes != undefined) {
+                this.sigBytes = sigBytes;
+            } else {
+                this.sigBytes = words.length * 4;
+            }
+        },
+
+        /**
+         * Converts this word array to a string.
+         *
+         * @param {Encoder} encoder (Optional) The encoding strategy to use. Default: CryptoJS.enc.Hex
+         *
+         * @return {string} The stringified word array.
+         *
+         * @example
+         *
+         *     var string = wordArray + '';
+         *     var string = wordArray.toString();
+         *     var string = wordArray.toString(CryptoJS.enc.Utf8);
+         */
+        toString: function (encoder) {
+            return (encoder || Hex).stringify(this);
+        },
+
+        /**
+         * Concatenates a word array to this word array.
+         *
+         * @param {WordArray} wordArray The word array to append.
+         *
+         * @return {WordArray} This word array.
+         *
+         * @example
+         *
+         *     wordArray1.concat(wordArray2);
+         */
+        concat: function (wordArray) {
+            // Shortcuts
+            var thisWords = this.words;
+            var thatWords = wordArray.words;
+            var thisSigBytes = this.sigBytes;
+            var thatSigBytes = wordArray.sigBytes;
+
+            // Clamp excess bits
+            this.clamp();
+
+            // Concat
+            if (thisSigBytes % 4) {
+                // Copy one byte at a time
+                for (var i = 0; i < thatSigBytes; i++) {
+                    var thatByte = (thatWords[i >>> 2] >>> (24 - (i % 4) * 8)) & 0xff;
+                    thisWords[(thisSigBytes + i) >>> 2] |= thatByte << (24 - ((thisSigBytes + i) % 4) * 8);
+                }
+            } else {
+                // Copy one word at a time
+                for (var i = 0; i < thatSigBytes; i += 4) {
+                    thisWords[(thisSigBytes + i) >>> 2] = thatWords[i >>> 2];
+                }
+            }
+            this.sigBytes += thatSigBytes;
+
+            // Chainable
+            return this;
+        },
+
+        /**
+         * Removes insignificant bits.
+         *
+         * @example
+         *
+         *     wordArray.clamp();
+         */
+        clamp: function () {
+            // Shortcuts
+            var words = this.words;
+            var sigBytes = this.sigBytes;
+
+            // Clamp
+            words[sigBytes >>> 2] &= 0xffffffff << (32 - (sigBytes % 4) * 8);
+            words.length = Math.ceil(sigBytes / 4);
+        },
+
+        /**
+         * Creates a copy of this word array.
+         *
+         * @return {WordArray} The clone.
+         *
+         * @example
+         *
+         *     var clone = wordArray.clone();
+         */
+        clone: function () {
+            var clone = Base.clone.call(this);
+            clone.words = this.words.slice(0);
+
+            return clone;
+        },
+
+        /**
+         * Creates a word array filled with random bytes.
+         *
+         * @param {number} nBytes The number of random bytes to generate.
+         *
+         * @return {WordArray} The random word array.
+         *
+         * @static
+         *
+         * @example
+         *
+         *     var wordArray = CryptoJS.lib.WordArray.random(16);
+         */
+        random: function (nBytes) {
+            var words = [];
+
+            var r = function (m_w) {
+                var m_w = m_w;
+                var m_z = 0x3ade68b1;
+                var mask = 0xffffffff;
+
+                return function () {
+                    m_z = (0x9069 * (m_z & 0xFFFF) + (m_z >> 0x10)) & mask;
+                    m_w = (0x4650 * (m_w & 0xFFFF) + (m_w >> 0x10)) & mask;
+                    var result = ((m_z << 0x10) + m_w) & mask;
+                    result /= 0x100000000;
+                    result += 0.5;
+                    return result * (Math.random() > 0.5 ? 1 : -1);
+                }
+            };
+
+            for (var i = 0, rcache; i < nBytes; i += 4) {
+                var _r = r((rcache || Math.random()) * 0x100000000);
+
+                rcache = _r() * 0x3ade67b7;
+                words.push((_r() * 0x100000000) | 0);
+            }
+
+            return new WordArray.init(words, nBytes);
+        }
+    });
+
+    /**
+     * Encoder namespace.
+     */
+    var C_enc = C.enc = {};
+
+    /**
+     * Hex encoding strategy.
+     */
+    var Hex = C_enc.Hex = {
+        /**
+         * Converts a word array to a hex string.
+         *
+         * @param {WordArray} wordArray The word array.
+         *
+         * @return {string} The hex string.
+         *
+         * @static
+         *
+         * @example
+         *
+         *     var hexString = CryptoJS.enc.Hex.stringify(wordArray);
+         */
+        stringify: function (wordArray) {
+            // Shortcuts
+            var words = wordArray.words;
+            var sigBytes = wordArray.sigBytes;
+
+            // Convert
+            var hexChars = [];
+            for (var i = 0; i < sigBytes; i++) {
+                var bite = (words[i >>> 2] >>> (24 - (i % 4) * 8)) & 0xff;
+                hexChars.push((bite >>> 4).toString(16));
+                hexChars.push((bite & 0x0f).toString(16));
+            }
+
+            return hexChars.join('');
+        },
+
+        /**
+         * Converts a hex string to a word array.
+         *
+         * @param {string} hexStr The hex string.
+         *
+         * @return {WordArray} The word array.
+         *
+         * @static
+         *
+         * @example
+         *
+         *     var wordArray = CryptoJS.enc.Hex.parse(hexString);
+         */
+        parse: function (hexStr) {
+            // Shortcut
+            var hexStrLength = hexStr.length;
+
+            // Convert
+            var words = [];
+            for (var i = 0; i < hexStrLength; i += 2) {
+                words[i >>> 3] |= parseInt(hexStr.substr(i, 2), 16) << (24 - (i % 8) * 4);
+            }
+
+            return new WordArray.init(words, hexStrLength / 2);
+        }
+    };
+
+    /**
+     * Latin1 encoding strategy.
+     */
+    var Latin1 = C_enc.Latin1 = {
+        /**
+         * Converts a word array to a Latin1 string.
+         *
+         * @param {WordArray} wordArray The word array.
+         *
+         * @return {string} The Latin1 string.
+         *
+         * @static
+         *
+         * @example
+         *
+         *     var latin1String = CryptoJS.enc.Latin1.stringify(wordArray);
+         */
+        stringify: function (wordArray) {
+            // Shortcuts
+            var words = wordArray.words;
+            var sigBytes = wordArray.sigBytes;
+
+            // Convert
+            var latin1Chars = [];
+            for (var i = 0; i < sigBytes; i++) {
+                var bite = (words[i >>> 2] >>> (24 - (i % 4) * 8)) & 0xff;
+                latin1Chars.push(String.fromCharCode(bite));
+            }
+
+            return latin1Chars.join('');
+        },
+
+        /**
+         * Converts a Latin1 string to a word array.
+         *
+         * @param {string} latin1Str The Latin1 string.
+         *
+         * @return {WordArray} The word array.
+         *
+         * @static
+         *
+         * @example
+         *
+         *     var wordArray = CryptoJS.enc.Latin1.parse(latin1String);
+         */
+        parse: function (latin1Str) {
+            // Shortcut
+            var latin1StrLength = latin1Str.length;
+
+            // Convert
+            var words = [];
+            for (var i = 0; i < latin1StrLength; i++) {
+                words[i >>> 2] |= (latin1Str.charCodeAt(i) & 0xff) << (24 - (i % 4) * 8);
+            }
+
+            return new WordArray.init(words, latin1StrLength);
+        }
+    };
+
+    /**
+     * UTF-8 encoding strategy.
+     */
+    var Utf8 = C_enc.Utf8 = {
+        /**
+         * Converts a word array to a UTF-8 string.
+         *
+         * @param {WordArray} wordArray The word array.
+         *
+         * @return {string} The UTF-8 string.
+         *
+         * @static
+         *
+         * @example
+         *
+         *     var utf8String = CryptoJS.enc.Utf8.stringify(wordArray);
+         */
+        stringify: function (wordArray) {
+            try {
+                return decodeURIComponent(escape(Latin1.stringify(wordArray)));
+            } catch (e) {
+                throw new Error('Malformed UTF-8 data');
+            }
+        },
+
+        /**
+         * Converts a UTF-8 string to a word array.
+         *
+         * @param {string} utf8Str The UTF-8 string.
+         *
+         * @return {WordArray} The word array.
+         *
+         * @static
+         *
+         * @example
+         *
+         *     var wordArray = CryptoJS.enc.Utf8.parse(utf8String);
+         */
+        parse: function (utf8Str) {
+            return Latin1.parse(unescape(encodeURIComponent(utf8Str)));
+        }
+    };
+
+    /**
+     * Abstract buffered block algorithm template.
+     *
+     * The property blockSize must be implemented in a concrete subtype.
+     *
+     * @property {number} _minBufferSize The number of blocks that should be kept unprocessed in the buffer. Default: 0
+     */
+    var BufferedBlockAlgorithm = C_lib.BufferedBlockAlgorithm = Base.extend({
+        /**
+         * Resets this block algorithm's data buffer to its initial state.
+         *
+         * @example
+         *
+         *     bufferedBlockAlgorithm.reset();
+         */
+        reset: function () {
+            // Initial values
+            this._data = new WordArray.init();
+            this._nDataBytes = 0;
+        },
+
+        /**
+         * Adds new data to this block algorithm's buffer.
+         *
+         * @param {WordArray|string} data The data to append. Strings are converted to a WordArray using UTF-8.
+         *
+         * @example
+         *
+         *     bufferedBlockAlgorithm._append('data');
+         *     bufferedBlockAlgorithm._append(wordArray);
+         */
+        _append: function (data) {
+            // Convert string to WordArray, else assume WordArray already
+            if (typeof data == 'string') {
+                data = Utf8.parse(data);
+            }
+
+            // Append
+            this._data.concat(data);
+            this._nDataBytes += data.sigBytes;
+        },
+
+        /**
+         * Processes available data blocks.
+         *
+         * This method invokes _doProcessBlock(offset), which must be implemented by a concrete subtype.
+         *
+         * @param {boolean} doFlush Whether all blocks and partial blocks should be processed.
+         *
+         * @return {WordArray} The processed data.
+         *
+         * @example
+         *
+         *     var processedData = bufferedBlockAlgorithm._process();
+         *     var processedData = bufferedBlockAlgorithm._process(!!'flush');
+         */
+        _process: function (doFlush) {
+            var processedWords;
+            
+            // Shortcuts
+            var data = this._data;
+            var dataWords = data.words;
+            var dataSigBytes = data.sigBytes;
+            var blockSize = this.blockSize;
+            var blockSizeBytes = blockSize * 4;
+
+            // Count blocks ready
+            var nBlocksReady = dataSigBytes / blockSizeBytes;
+            if (doFlush) {
+                // Round up to include partial blocks
+                nBlocksReady = Math.ceil(nBlocksReady);
+            } else {
+                // Round down to include only full blocks,
+                // less the number of blocks that must remain in the buffer
+                nBlocksReady = Math.max((nBlocksReady | 0) - this._minBufferSize, 0);
+            }
+
+            // Count words ready
+            var nWordsReady = nBlocksReady * blockSize;
+
+            // Count bytes ready
+            var nBytesReady = Math.min(nWordsReady * 4, dataSigBytes);
+
+            // Process blocks
+            if (nWordsReady) {
+                for (var offset = 0; offset < nWordsReady; offset += blockSize) {
+                    // Perform concrete-algorithm logic
+                    this._doProcessBlock(dataWords, offset);
+                }
+
+                // Remove processed words
+                processedWords = dataWords.splice(0, nWordsReady);
+                data.sigBytes -= nBytesReady;
+            }
+
+            // Return processed words
+            return new WordArray.init(processedWords, nBytesReady);
+        },
+
+        /**
+         * Creates a copy of this object.
+         *
+         * @return {Object} The clone.
+         *
+         * @example
+         *
+         *     var clone = bufferedBlockAlgorithm.clone();
+         */
+        clone: function () {
+            var clone = Base.clone.call(this);
+            clone._data = this._data.clone();
+
+            return clone;
+        },
+
+        _minBufferSize: 0
+    });
+
+    /**
+     * Abstract hasher template.
+     *
+     * @property {number} blockSize The number of 32-bit words this hasher operates on. Default: 16 (512 bits)
+     */
+    var Hasher = C_lib.Hasher = BufferedBlockAlgorithm.extend({
+        /**
+         * Configuration options.
+         */
+        cfg: Base.extend(),
+
+        /**
+         * Initializes a newly created hasher.
+         *
+         * @param {Object} cfg (Optional) The configuration options to use for this hash computation.
+         *
+         * @example
+         *
+         *     var hasher = CryptoJS.algo.SHA256.create();
+         */
+        init: function (cfg) {
+            // Apply config defaults
+            this.cfg = this.cfg.extend(cfg);
+
+            // Set initial values
+            this.reset();
+        },
+
+        /**
+         * Resets this hasher to its initial state.
+         *
+         * @example
+         *
+         *     hasher.reset();
+         */
+        reset: function () {
+            // Reset data buffer
+            BufferedBlockAlgorithm.reset.call(this);
+
+            // Perform concrete-hasher logic
+            this._doReset();
+        },
+
+        /**
+         * Updates this hasher with a message.
+         *
+         * @param {WordArray|string} messageUpdate The message to append.
+         *
+         * @return {Hasher} This hasher.
+         *
+         * @example
+         *
+         *     hasher.update('message');
+         *     hasher.update(wordArray);
+         */
+        update: function (messageUpdate) {
+            // Append
+            this._append(messageUpdate);
+
+            // Update the hash
+            this._process();
+
+            // Chainable
+            return this;
+        },
+
+        /**
+         * Finalizes the hash computation.
+         * Note that the finalize operation is effectively a destructive, read-once operation.
+         *
+         * @param {WordArray|string} messageUpdate (Optional) A final message update.
+         *
+         * @return {WordArray} The hash.
+         *
+         * @example
+         *
+         *     var hash = hasher.finalize();
+         *     var hash = hasher.finalize('message');
+         *     var hash = hasher.finalize(wordArray);
+         */
+        finalize: function (messageUpdate) {
+            // Final message update
+            if (messageUpdate) {
+                this._append(messageUpdate);
+            }
+
+            // Perform concrete-hasher logic
+            var hash = this._doFinalize();
+
+            return hash;
+        },
+
+        blockSize: 512/32,
+
+        /**
+         * Creates a shortcut function to a hasher's object interface.
+         *
+         * @param {Hasher} hasher The hasher to create a helper for.
+         *
+         * @return {Function} The shortcut function.
+         *
+         * @static
+         *
+         * @example
+         *
+         *     var SHA256 = CryptoJS.lib.Hasher._createHelper(CryptoJS.algo.SHA256);
+         */
+        _createHelper: function (hasher) {
+            return function (message, cfg) {
+                return new hasher.init(cfg).finalize(message);
+            };
+        },
+
+        /**
+         * Creates a shortcut function to the HMAC's object interface.
+         *
+         * @param {Hasher} hasher The hasher to use in this HMAC helper.
+         *
+         * @return {Function} The shortcut function.
+         *
+         * @static
+         *
+         * @example
+         *
+         *     var HmacSHA256 = CryptoJS.lib.Hasher._createHmacHelper(CryptoJS.algo.SHA256);
+         */
+        _createHmacHelper: function (hasher) {
+            return function (message, key) {
+                return new C_algo.HMAC.init(hasher, key).finalize(message);
+            };
+        }
+    });
+
+    /**
+     * Algorithm namespace.
+     */
+    var C_algo = C.algo = {};
+
+    return C;
+}(Math));
+
+(function () {
+    // Shortcuts
+    var C = CryptoJS;
+    var C_lib = C.lib;
+    var Base = C_lib.Base;
+    var C_enc = C.enc;
+    var Utf8 = C_enc.Utf8;
+    var C_algo = C.algo;
+
+    /**
+     * HMAC algorithm.
+     */
+    var HMAC = C_algo.HMAC = Base.extend({
+        /**
+         * Initializes a newly created HMAC.
+         *
+         * @param {Hasher} hasher The hash algorithm to use.
+         * @param {WordArray|string} key The secret key.
+         *
+         * @example
+         *
+         *     var hmacHasher = CryptoJS.algo.HMAC.create(CryptoJS.algo.SHA256, key);
+         */
+        init: function (hasher, key) {
+            // Init hasher
+            hasher = this._hasher = new hasher.init();
+
+            // Convert string to WordArray, else assume WordArray already
+            if (typeof key == 'string') {
+                key = Utf8.parse(key);
+            }
+
+            // Shortcuts
+            var hasherBlockSize = hasher.blockSize;
+            var hasherBlockSizeBytes = hasherBlockSize * 4;
+
+            // Allow arbitrary length keys
+            if (key.sigBytes > hasherBlockSizeBytes) {
+                key = hasher.finalize(key);
+            }
+
+            // Clamp excess bits
+            key.clamp();
+
+            // Clone key for inner and outer pads
+            var oKey = this._oKey = key.clone();
+            var iKey = this._iKey = key.clone();
+
+            // Shortcuts
+            var oKeyWords = oKey.words;
+            var iKeyWords = iKey.words;
+
+            // XOR keys with pad constants
+            for (var i = 0; i < hasherBlockSize; i++) {
+                oKeyWords[i] ^= 0x5c5c5c5c;
+                iKeyWords[i] ^= 0x36363636;
+            }
+            oKey.sigBytes = iKey.sigBytes = hasherBlockSizeBytes;
+
+            // Set initial values
+            this.reset();
+        },
+
+        /**
+         * Resets this HMAC to its initial state.
+         *
+         * @example
+         *
+         *     hmacHasher.reset();
+         */
+        reset: function () {
+            // Shortcut
+            var hasher = this._hasher;
+
+            // Reset
+            hasher.reset();
+            hasher.update(this._iKey);
+        },
+
+        /**
+         * Updates this HMAC with a message.
+         *
+         * @param {WordArray|string} messageUpdate The message to append.
+         *
+         * @return {HMAC} This HMAC instance.
+         *
+         * @example
+         *
+         *     hmacHasher.update('message');
+         *     hmacHasher.update(wordArray);
+         */
+        update: function (messageUpdate) {
+            this._hasher.update(messageUpdate);
+
+            // Chainable
+            return this;
+        },
+
+        /**
+         * Finalizes the HMAC computation.
+         * Note that the finalize operation is effectively a destructive, read-once operation.
+         *
+         * @param {WordArray|string} messageUpdate (Optional) A final message update.
+         *
+         * @return {WordArray} The HMAC.
+         *
+         * @example
+         *
+         *     var hmac = hmacHasher.finalize();
+         *     var hmac = hmacHasher.finalize('message');
+         *     var hmac = hmacHasher.finalize(wordArray);
+         */
+        finalize: function (messageUpdate) {
+            // Shortcut
+            var hasher = this._hasher;
+
+            // Compute HMAC
+            var innerHash = hasher.finalize(messageUpdate);
+            hasher.reset();
+            var hmac = hasher.finalize(this._oKey.clone().concat(innerHash));
+
+            return hmac;
+        }
+    });
+}());
+
+(function (Math) {
+    // Shortcuts
+    var C = CryptoJS;
+    var C_lib = C.lib;
+    var WordArray = C_lib.WordArray;
+    var Hasher = C_lib.Hasher;
+    var C_algo = C.algo;
+
+    // Initialization and round constants tables
+    var H = [];
+    var K = [];
+
+    // Compute constants
+    (function () {
+        function isPrime(n) {
+            var sqrtN = Math.sqrt(n);
+            for (var factor = 2; factor <= sqrtN; factor++) {
+                if (!(n % factor)) {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        function getFractionalBits(n) {
+            return ((n - (n | 0)) * 0x100000000) | 0;
+        }
+
+        var n = 2;
+        var nPrime = 0;
+        while (nPrime < 64) {
+            if (isPrime(n)) {
+                if (nPrime < 8) {
+                    H[nPrime] = getFractionalBits(Math.pow(n, 1 / 2));
+                }
+                K[nPrime] = getFractionalBits(Math.pow(n, 1 / 3));
+
+                nPrime++;
+            }
+
+            n++;
+        }
+    }());
+
+    // Reusable object
+    var W = [];
+
+    /**
+     * SHA-256 hash algorithm.
+     */
+    var SHA256 = C_algo.SHA256 = Hasher.extend({
+        _doReset: function () {
+            this._hash = new WordArray.init(H.slice(0));
+        },
+
+        _doProcessBlock: function (M, offset) {
+            // Shortcut
+            var H = this._hash.words;
+
+            // Working variables
+            var a = H[0];
+            var b = H[1];
+            var c = H[2];
+            var d = H[3];
+            var e = H[4];
+            var f = H[5];
+            var g = H[6];
+            var h = H[7];
+
+            // Computation
+            for (var i = 0; i < 64; i++) {
+                if (i < 16) {
+                    W[i] = M[offset + i] | 0;
+                } else {
+                    var gamma0x = W[i - 15];
+                    var gamma0  = ((gamma0x << 25) | (gamma0x >>> 7))  ^
+                                  ((gamma0x << 14) | (gamma0x >>> 18)) ^
+                                   (gamma0x >>> 3);
+
+                    var gamma1x = W[i - 2];
+                    var gamma1  = ((gamma1x << 15) | (gamma1x >>> 17)) ^
+                                  ((gamma1x << 13) | (gamma1x >>> 19)) ^
+                                   (gamma1x >>> 10);
+
+                    W[i] = gamma0 + W[i - 7] + gamma1 + W[i - 16];
+                }
+
+                var ch  = (e & f) ^ (~e & g);
+                var maj = (a & b) ^ (a & c) ^ (b & c);
+
+                var sigma0 = ((a << 30) | (a >>> 2)) ^ ((a << 19) | (a >>> 13)) ^ ((a << 10) | (a >>> 22));
+                var sigma1 = ((e << 26) | (e >>> 6)) ^ ((e << 21) | (e >>> 11)) ^ ((e << 7)  | (e >>> 25));
+
+                var t1 = h + sigma1 + ch + K[i] + W[i];
+                var t2 = sigma0 + maj;
+
+                h = g;
+                g = f;
+                f = e;
+                e = (d + t1) | 0;
+                d = c;
+                c = b;
+                b = a;
+                a = (t1 + t2) | 0;
+            }
+
+            // Intermediate hash value
+            H[0] = (H[0] + a) | 0;
+            H[1] = (H[1] + b) | 0;
+            H[2] = (H[2] + c) | 0;
+            H[3] = (H[3] + d) | 0;
+            H[4] = (H[4] + e) | 0;
+            H[5] = (H[5] + f) | 0;
+            H[6] = (H[6] + g) | 0;
+            H[7] = (H[7] + h) | 0;
+        },
+
+        _doFinalize: function () {
+            // Shortcuts
+            var data = this._data;
+            var dataWords = data.words;
+
+            var nBitsTotal = this._nDataBytes * 8;
+            var nBitsLeft = data.sigBytes * 8;
+
+            // Add padding
+            dataWords[nBitsLeft >>> 5] |= 0x80 << (24 - nBitsLeft % 32);
+            dataWords[(((nBitsLeft + 64) >>> 9) << 4) + 14] = Math.floor(nBitsTotal / 0x100000000);
+            dataWords[(((nBitsLeft + 64) >>> 9) << 4) + 15] = nBitsTotal;
+            data.sigBytes = dataWords.length * 4;
+
+            // Hash final blocks
+            this._process();
+
+            // Return final computed hash
+            return this._hash;
+        },
+
+        clone: function () {
+            var clone = Hasher.clone.call(this);
+            clone._hash = this._hash.clone();
+
+            return clone;
+        }
+    });
+
+    /**
+     * Shortcut function to the hasher's object interface.
+     *
+     * @param {WordArray|string} message The message to hash.
+     *
+     * @return {WordArray} The hash.
+     *
+     * @static
+     *
+     * @example
+     *
+     *     var hash = CryptoJS.SHA256('message');
+     *     var hash = CryptoJS.SHA256(wordArray);
+     */
+    C.SHA256 = Hasher._createHelper(SHA256);
+
+    /**
+     * Shortcut function to the HMAC's object interface.
+     *
+     * @param {WordArray|string} message The message to hash.
+     * @param {WordArray|string} key The secret key.
+     *
+     * @return {WordArray} The HMAC.
+     *
+     * @static
+     *
+     * @example
+     *
+     *     var hmac = CryptoJS.HmacSHA256(message, key);
+     */
+    C.HmacSHA256 = Hasher._createHmacHelper(SHA256);
+}(Math));
+
+(function (undefined) {
+    // Shortcuts
+    var C = CryptoJS;
+    var C_lib = C.lib;
+    var Base = C_lib.Base;
+    var X32WordArray = C_lib.WordArray;
+
+    /**
+     * x64 namespace.
+     */
+    var C_x64 = C.x64 = {};
+
+    /**
+     * A 64-bit word.
+     */
+    var X64Word = C_x64.Word = Base.extend({
+        /**
+         * Initializes a newly created 64-bit word.
+         *
+         * @param {number} high The high 32 bits.
+         * @param {number} low The low 32 bits.
+         *
+         * @example
+         *
+         *     var x64Word = CryptoJS.x64.Word.create(0x00010203, 0x04050607);
+         */
+        init: function (high, low) {
+            this.high = high;
+            this.low = low;
+        }
+
+        /**
+         * Bitwise NOTs this word.
+         *
+         * @return {X64Word} A new x64-Word object after negating.
+         *
+         * @example
+         *
+         *     var negated = x64Word.not();
+         */
+        // not: function () {
+            // var high = ~this.high;
+            // var low = ~this.low;
+
+            // return X64Word.create(high, low);
+        // },
+
+        /**
+         * Bitwise ANDs this word with the passed word.
+         *
+         * @param {X64Word} word The x64-Word to AND with this word.
+         *
+         * @return {X64Word} A new x64-Word object after ANDing.
+         *
+         * @example
+         *
+         *     var anded = x64Word.and(anotherX64Word);
+         */
+        // and: function (word) {
+            // var high = this.high & word.high;
+            // var low = this.low & word.low;
+
+            // return X64Word.create(high, low);
+        // },
+
+        /**
+         * Bitwise ORs this word with the passed word.
+         *
+         * @param {X64Word} word The x64-Word to OR with this word.
+         *
+         * @return {X64Word} A new x64-Word object after ORing.
+         *
+         * @example
+         *
+         *     var ored = x64Word.or(anotherX64Word);
+         */
+        // or: function (word) {
+            // var high = this.high | word.high;
+            // var low = this.low | word.low;
+
+            // return X64Word.create(high, low);
+        // },
+
+        /**
+         * Bitwise XORs this word with the passed word.
+         *
+         * @param {X64Word} word The x64-Word to XOR with this word.
+         *
+         * @return {X64Word} A new x64-Word object after XORing.
+         *
+         * @example
+         *
+         *     var xored = x64Word.xor(anotherX64Word);
+         */
+        // xor: function (word) {
+            // var high = this.high ^ word.high;
+            // var low = this.low ^ word.low;
+
+            // return X64Word.create(high, low);
+        // },
+
+        /**
+         * Shifts this word n bits to the left.
+         *
+         * @param {number} n The number of bits to shift.
+         *
+         * @return {X64Word} A new x64-Word object after shifting.
+         *
+         * @example
+         *
+         *     var shifted = x64Word.shiftL(25);
+         */
+        // shiftL: function (n) {
+            // if (n < 32) {
+                // var high = (this.high << n) | (this.low >>> (32 - n));
+                // var low = this.low << n;
+            // } else {
+                // var high = this.low << (n - 32);
+                // var low = 0;
+            // }
+
+            // return X64Word.create(high, low);
+        // },
+
+        /**
+         * Shifts this word n bits to the right.
+         *
+         * @param {number} n The number of bits to shift.
+         *
+         * @return {X64Word} A new x64-Word object after shifting.
+         *
+         * @example
+         *
+         *     var shifted = x64Word.shiftR(7);
+         */
+        // shiftR: function (n) {
+            // if (n < 32) {
+                // var low = (this.low >>> n) | (this.high << (32 - n));
+                // var high = this.high >>> n;
+            // } else {
+                // var low = this.high >>> (n - 32);
+                // var high = 0;
+            // }
+
+            // return X64Word.create(high, low);
+        // },
+
+        /**
+         * Rotates this word n bits to the left.
+         *
+         * @param {number} n The number of bits to rotate.
+         *
+         * @return {X64Word} A new x64-Word object after rotating.
+         *
+         * @example
+         *
+         *     var rotated = x64Word.rotL(25);
+         */
+        // rotL: function (n) {
+            // return this.shiftL(n).or(this.shiftR(64 - n));
+        // },
+
+        /**
+         * Rotates this word n bits to the right.
+         *
+         * @param {number} n The number of bits to rotate.
+         *
+         * @return {X64Word} A new x64-Word object after rotating.
+         *
+         * @example
+         *
+         *     var rotated = x64Word.rotR(7);
+         */
+        // rotR: function (n) {
+            // return this.shiftR(n).or(this.shiftL(64 - n));
+        // },
+
+        /**
+         * Adds this word with the passed word.
+         *
+         * @param {X64Word} word The x64-Word to add with this word.
+         *
+         * @return {X64Word} A new x64-Word object after adding.
+         *
+         * @example
+         *
+         *     var added = x64Word.add(anotherX64Word);
+         */
+        // add: function (word) {
+            // var low = (this.low + word.low) | 0;
+            // var carry = (low >>> 0) < (this.low >>> 0) ? 1 : 0;
+            // var high = (this.high + word.high + carry) | 0;
+
+            // return X64Word.create(high, low);
+        // }
+    });
+
+    /**
+     * An array of 64-bit words.
+     *
+     * @property {Array} words The array of CryptoJS.x64.Word objects.
+     * @property {number} sigBytes The number of significant bytes in this word array.
+     */
+    var X64WordArray = C_x64.WordArray = Base.extend({
+        /**
+         * Initializes a newly created word array.
+         *
+         * @param {Array} words (Optional) An array of CryptoJS.x64.Word objects.
+         * @param {number} sigBytes (Optional) The number of significant bytes in the words.
+         *
+         * @example
+         *
+         *     var wordArray = CryptoJS.x64.WordArray.create();
+         *
+         *     var wordArray = CryptoJS.x64.WordArray.create([
+         *         CryptoJS.x64.Word.create(0x00010203, 0x04050607),
+         *         CryptoJS.x64.Word.create(0x18191a1b, 0x1c1d1e1f)
+         *     ]);
+         *
+         *     var wordArray = CryptoJS.x64.WordArray.create([
+         *         CryptoJS.x64.Word.create(0x00010203, 0x04050607),
+         *         CryptoJS.x64.Word.create(0x18191a1b, 0x1c1d1e1f)
+         *     ], 10);
+         */
+        init: function (words, sigBytes) {
+            words = this.words = words || [];
+
+            if (sigBytes != undefined) {
+                this.sigBytes = sigBytes;
+            } else {
+                this.sigBytes = words.length * 8;
+            }
+        },
+
+        /**
+         * Converts this 64-bit word array to a 32-bit word array.
+         *
+         * @return {CryptoJS.lib.WordArray} This word array's data as a 32-bit word array.
+         *
+         * @example
+         *
+         *     var x32WordArray = x64WordArray.toX32();
+         */
+        toX32: function () {
+            // Shortcuts
+            var x64Words = this.words;
+            var x64WordsLength = x64Words.length;
+
+            // Convert
+            var x32Words = [];
+            for (var i = 0; i < x64WordsLength; i++) {
+                var x64Word = x64Words[i];
+                x32Words.push(x64Word.high);
+                x32Words.push(x64Word.low);
+            }
+
+            return X32WordArray.create(x32Words, this.sigBytes);
+        },
+
+        /**
+         * Creates a copy of this word array.
+         *
+         * @return {X64WordArray} The clone.
+         *
+         * @example
+         *
+         *     var clone = x64WordArray.clone();
+         */
+        clone: function () {
+            var clone = Base.clone.call(this);
+
+            // Clone "words" array
+            var words = clone.words = this.words.slice(0);
+
+            // Clone each X64Word object
+            var wordsLength = words.length;
+            for (var i = 0; i < wordsLength; i++) {
+                words[i] = words[i].clone();
+            }
+
+            return clone;
+        }
+    });
+}());
+
+(function () {
+    // Shortcuts
+    var C = CryptoJS;
+    var C_lib = C.lib;
+    var Hasher = C_lib.Hasher;
+    var C_x64 = C.x64;
+    var X64Word = C_x64.Word;
+    var X64WordArray = C_x64.WordArray;
+    var C_algo = C.algo;
+
+    function X64Word_create() {
+        return X64Word.create.apply(X64Word, arguments);
+    }
+
+    // Constants
+    var K = [
+        X64Word_create(0x428a2f98, 0xd728ae22), X64Word_create(0x71374491, 0x23ef65cd),
+        X64Word_create(0xb5c0fbcf, 0xec4d3b2f), X64Word_create(0xe9b5dba5, 0x8189dbbc),
+        X64Word_create(0x3956c25b, 0xf348b538), X64Word_create(0x59f111f1, 0xb605d019),
+        X64Word_create(0x923f82a4, 0xaf194f9b), X64Word_create(0xab1c5ed5, 0xda6d8118),
+        X64Word_create(0xd807aa98, 0xa3030242), X64Word_create(0x12835b01, 0x45706fbe),
+        X64Word_create(0x243185be, 0x4ee4b28c), X64Word_create(0x550c7dc3, 0xd5ffb4e2),
+        X64Word_create(0x72be5d74, 0xf27b896f), X64Word_create(0x80deb1fe, 0x3b1696b1),
+        X64Word_create(0x9bdc06a7, 0x25c71235), X64Word_create(0xc19bf174, 0xcf692694),
+        X64Word_create(0xe49b69c1, 0x9ef14ad2), X64Word_create(0xefbe4786, 0x384f25e3),
+        X64Word_create(0x0fc19dc6, 0x8b8cd5b5), X64Word_create(0x240ca1cc, 0x77ac9c65),
+        X64Word_create(0x2de92c6f, 0x592b0275), X64Word_create(0x4a7484aa, 0x6ea6e483),
+        X64Word_create(0x5cb0a9dc, 0xbd41fbd4), X64Word_create(0x76f988da, 0x831153b5),
+        X64Word_create(0x983e5152, 0xee66dfab), X64Word_create(0xa831c66d, 0x2db43210),
+        X64Word_create(0xb00327c8, 0x98fb213f), X64Word_create(0xbf597fc7, 0xbeef0ee4),
+        X64Word_create(0xc6e00bf3, 0x3da88fc2), X64Word_create(0xd5a79147, 0x930aa725),
+        X64Word_create(0x06ca6351, 0xe003826f), X64Word_create(0x14292967, 0x0a0e6e70),
+        X64Word_create(0x27b70a85, 0x46d22ffc), X64Word_create(0x2e1b2138, 0x5c26c926),
+        X64Word_create(0x4d2c6dfc, 0x5ac42aed), X64Word_create(0x53380d13, 0x9d95b3df),
+        X64Word_create(0x650a7354, 0x8baf63de), X64Word_create(0x766a0abb, 0x3c77b2a8),
+        X64Word_create(0x81c2c92e, 0x47edaee6), X64Word_create(0x92722c85, 0x1482353b),
+        X64Word_create(0xa2bfe8a1, 0x4cf10364), X64Word_create(0xa81a664b, 0xbc423001),
+        X64Word_create(0xc24b8b70, 0xd0f89791), X64Word_create(0xc76c51a3, 0x0654be30),
+        X64Word_create(0xd192e819, 0xd6ef5218), X64Word_create(0xd6990624, 0x5565a910),
+        X64Word_create(0xf40e3585, 0x5771202a), X64Word_create(0x106aa070, 0x32bbd1b8),
+        X64Word_create(0x19a4c116, 0xb8d2d0c8), X64Word_create(0x1e376c08, 0x5141ab53),
+        X64Word_create(0x2748774c, 0xdf8eeb99), X64Word_create(0x34b0bcb5, 0xe19b48a8),
+        X64Word_create(0x391c0cb3, 0xc5c95a63), X64Word_create(0x4ed8aa4a, 0xe3418acb),
+        X64Word_create(0x5b9cca4f, 0x7763e373), X64Word_create(0x682e6ff3, 0xd6b2b8a3),
+        X64Word_create(0x748f82ee, 0x5defb2fc), X64Word_create(0x78a5636f, 0x43172f60),
+        X64Word_create(0x84c87814, 0xa1f0ab72), X64Word_create(0x8cc70208, 0x1a6439ec),
+        X64Word_create(0x90befffa, 0x23631e28), X64Word_create(0xa4506ceb, 0xde82bde9),
+        X64Word_create(0xbef9a3f7, 0xb2c67915), X64Word_create(0xc67178f2, 0xe372532b),
+        X64Word_create(0xca273ece, 0xea26619c), X64Word_create(0xd186b8c7, 0x21c0c207),
+        X64Word_create(0xeada7dd6, 0xcde0eb1e), X64Word_create(0xf57d4f7f, 0xee6ed178),
+        X64Word_create(0x06f067aa, 0x72176fba), X64Word_create(0x0a637dc5, 0xa2c898a6),
+        X64Word_create(0x113f9804, 0xbef90dae), X64Word_create(0x1b710b35, 0x131c471b),
+        X64Word_create(0x28db77f5, 0x23047d84), X64Word_create(0x32caab7b, 0x40c72493),
+        X64Word_create(0x3c9ebe0a, 0x15c9bebc), X64Word_create(0x431d67c4, 0x9c100d4c),
+        X64Word_create(0x4cc5d4be, 0xcb3e42b6), X64Word_create(0x597f299c, 0xfc657e2a),
+        X64Word_create(0x5fcb6fab, 0x3ad6faec), X64Word_create(0x6c44198c, 0x4a475817)
+    ];
+
+    // Reusable objects
+    var W = [];
+    (function () {
+        for (var i = 0; i < 80; i++) {
+            W[i] = X64Word_create();
+        }
+    }());
+
+    /**
+     * SHA-512 hash algorithm.
+     */
+    var SHA512 = C_algo.SHA512 = Hasher.extend({
+        _doReset: function () {
+            this._hash = new X64WordArray.init([
+                new X64Word.init(0x6a09e667, 0xf3bcc908), new X64Word.init(0xbb67ae85, 0x84caa73b),
+                new X64Word.init(0x3c6ef372, 0xfe94f82b), new X64Word.init(0xa54ff53a, 0x5f1d36f1),
+                new X64Word.init(0x510e527f, 0xade682d1), new X64Word.init(0x9b05688c, 0x2b3e6c1f),
+                new X64Word.init(0x1f83d9ab, 0xfb41bd6b), new X64Word.init(0x5be0cd19, 0x137e2179)
+            ]);
+        },
+
+        _doProcessBlock: function (M, offset) {
+            // Shortcuts
+            var H = this._hash.words;
+
+            var H0 = H[0];
+            var H1 = H[1];
+            var H2 = H[2];
+            var H3 = H[3];
+            var H4 = H[4];
+            var H5 = H[5];
+            var H6 = H[6];
+            var H7 = H[7];
+
+            var H0h = H0.high;
+            var H0l = H0.low;
+            var H1h = H1.high;
+            var H1l = H1.low;
+            var H2h = H2.high;
+            var H2l = H2.low;
+            var H3h = H3.high;
+            var H3l = H3.low;
+            var H4h = H4.high;
+            var H4l = H4.low;
+            var H5h = H5.high;
+            var H5l = H5.low;
+            var H6h = H6.high;
+            var H6l = H6.low;
+            var H7h = H7.high;
+            var H7l = H7.low;
+
+            // Working variables
+            var ah = H0h;
+            var al = H0l;
+            var bh = H1h;
+            var bl = H1l;
+            var ch = H2h;
+            var cl = H2l;
+            var dh = H3h;
+            var dl = H3l;
+            var eh = H4h;
+            var el = H4l;
+            var fh = H5h;
+            var fl = H5l;
+            var gh = H6h;
+            var gl = H6l;
+            var hh = H7h;
+            var hl = H7l;
+
+            // Rounds
+            for (var i = 0; i < 80; i++) {
+                var Wil;
+                var Wih;
+
+                // Shortcut
+                var Wi = W[i];
+
+                // Extend message
+                if (i < 16) {
+                    Wih = Wi.high = M[offset + i * 2]     | 0;
+                    Wil = Wi.low  = M[offset + i * 2 + 1] | 0;
+                } else {
+                    // Gamma0
+                    var gamma0x  = W[i - 15];
+                    var gamma0xh = gamma0x.high;
+                    var gamma0xl = gamma0x.low;
+                    var gamma0h  = ((gamma0xh >>> 1) | (gamma0xl << 31)) ^ ((gamma0xh >>> 8) | (gamma0xl << 24)) ^ (gamma0xh >>> 7);
+                    var gamma0l  = ((gamma0xl >>> 1) | (gamma0xh << 31)) ^ ((gamma0xl >>> 8) | (gamma0xh << 24)) ^ ((gamma0xl >>> 7) | (gamma0xh << 25));
+
+                    // Gamma1
+                    var gamma1x  = W[i - 2];
+                    var gamma1xh = gamma1x.high;
+                    var gamma1xl = gamma1x.low;
+                    var gamma1h  = ((gamma1xh >>> 19) | (gamma1xl << 13)) ^ ((gamma1xh << 3) | (gamma1xl >>> 29)) ^ (gamma1xh >>> 6);
+                    var gamma1l  = ((gamma1xl >>> 19) | (gamma1xh << 13)) ^ ((gamma1xl << 3) | (gamma1xh >>> 29)) ^ ((gamma1xl >>> 6) | (gamma1xh << 26));
+
+                    // W[i] = gamma0 + W[i - 7] + gamma1 + W[i - 16]
+                    var Wi7  = W[i - 7];
+                    var Wi7h = Wi7.high;
+                    var Wi7l = Wi7.low;
+
+                    var Wi16  = W[i - 16];
+                    var Wi16h = Wi16.high;
+                    var Wi16l = Wi16.low;
+
+                    Wil = gamma0l + Wi7l;
+                    Wih = gamma0h + Wi7h + ((Wil >>> 0) < (gamma0l >>> 0) ? 1 : 0);
+                    Wil = Wil + gamma1l;
+                    Wih = Wih + gamma1h + ((Wil >>> 0) < (gamma1l >>> 0) ? 1 : 0);
+                    Wil = Wil + Wi16l;
+                    Wih = Wih + Wi16h + ((Wil >>> 0) < (Wi16l >>> 0) ? 1 : 0);
+
+                    Wi.high = Wih;
+                    Wi.low  = Wil;
+                }
+
+                var chh  = (eh & fh) ^ (~eh & gh);
+                var chl  = (el & fl) ^ (~el & gl);
+                var majh = (ah & bh) ^ (ah & ch) ^ (bh & ch);
+                var majl = (al & bl) ^ (al & cl) ^ (bl & cl);
+
+                var sigma0h = ((ah >>> 28) | (al << 4))  ^ ((ah << 30)  | (al >>> 2)) ^ ((ah << 25) | (al >>> 7));
+                var sigma0l = ((al >>> 28) | (ah << 4))  ^ ((al << 30)  | (ah >>> 2)) ^ ((al << 25) | (ah >>> 7));
+                var sigma1h = ((eh >>> 14) | (el << 18)) ^ ((eh >>> 18) | (el << 14)) ^ ((eh << 23) | (el >>> 9));
+                var sigma1l = ((el >>> 14) | (eh << 18)) ^ ((el >>> 18) | (eh << 14)) ^ ((el << 23) | (eh >>> 9));
+
+                // t1 = h + sigma1 + ch + K[i] + W[i]
+                var Ki  = K[i];
+                var Kih = Ki.high;
+                var Kil = Ki.low;
+
+                var t1l = hl + sigma1l;
+                var t1h = hh + sigma1h + ((t1l >>> 0) < (hl >>> 0) ? 1 : 0);
+                var t1l = t1l + chl;
+                var t1h = t1h + chh + ((t1l >>> 0) < (chl >>> 0) ? 1 : 0);
+                var t1l = t1l + Kil;
+                var t1h = t1h + Kih + ((t1l >>> 0) < (Kil >>> 0) ? 1 : 0);
+                var t1l = t1l + Wil;
+                var t1h = t1h + Wih + ((t1l >>> 0) < (Wil >>> 0) ? 1 : 0);
+
+                // t2 = sigma0 + maj
+                var t2l = sigma0l + majl;
+                var t2h = sigma0h + majh + ((t2l >>> 0) < (sigma0l >>> 0) ? 1 : 0);
+
+                // Update working variables
+                hh = gh;
+                hl = gl;
+                gh = fh;
+                gl = fl;
+                fh = eh;
+                fl = el;
+                el = (dl + t1l) | 0;
+                eh = (dh + t1h + ((el >>> 0) < (dl >>> 0) ? 1 : 0)) | 0;
+                dh = ch;
+                dl = cl;
+                ch = bh;
+                cl = bl;
+                bh = ah;
+                bl = al;
+                al = (t1l + t2l) | 0;
+                ah = (t1h + t2h + ((al >>> 0) < (t1l >>> 0) ? 1 : 0)) | 0;
+            }
+
+            // Intermediate hash value
+            H0l = H0.low  = (H0l + al);
+            H0.high = (H0h + ah + ((H0l >>> 0) < (al >>> 0) ? 1 : 0));
+            H1l = H1.low  = (H1l + bl);
+            H1.high = (H1h + bh + ((H1l >>> 0) < (bl >>> 0) ? 1 : 0));
+            H2l = H2.low  = (H2l + cl);
+            H2.high = (H2h + ch + ((H2l >>> 0) < (cl >>> 0) ? 1 : 0));
+            H3l = H3.low  = (H3l + dl);
+            H3.high = (H3h + dh + ((H3l >>> 0) < (dl >>> 0) ? 1 : 0));
+            H4l = H4.low  = (H4l + el);
+            H4.high = (H4h + eh + ((H4l >>> 0) < (el >>> 0) ? 1 : 0));
+            H5l = H5.low  = (H5l + fl);
+            H5.high = (H5h + fh + ((H5l >>> 0) < (fl >>> 0) ? 1 : 0));
+            H6l = H6.low  = (H6l + gl);
+            H6.high = (H6h + gh + ((H6l >>> 0) < (gl >>> 0) ? 1 : 0));
+            H7l = H7.low  = (H7l + hl);
+            H7.high = (H7h + hh + ((H7l >>> 0) < (hl >>> 0) ? 1 : 0));
+        },
+
+        _doFinalize: function () {
+            // Shortcuts
+            var data = this._data;
+            var dataWords = data.words;
+
+            var nBitsTotal = this._nDataBytes * 8;
+            var nBitsLeft = data.sigBytes * 8;
+
+            // Add padding
+            dataWords[nBitsLeft >>> 5] |= 0x80 << (24 - nBitsLeft % 32);
+            dataWords[(((nBitsLeft + 128) >>> 10) << 5) + 30] = Math.floor(nBitsTotal / 0x100000000);
+            dataWords[(((nBitsLeft + 128) >>> 10) << 5) + 31] = nBitsTotal;
+            data.sigBytes = dataWords.length * 4;
+
+            // Hash final blocks
+            this._process();
+
+            // Convert hash to 32-bit word array before returning
+            var hash = this._hash.toX32();
+
+            // Return final computed hash
+            return hash;
+        },
+
+        clone: function () {
+            var clone = Hasher.clone.call(this);
+            clone._hash = this._hash.clone();
+
+            return clone;
+        },
+
+        blockSize: 1024/32
+    });
+
+    /**
+     * Shortcut function to the hasher's object interface.
+     *
+     * @param {WordArray|string} message The message to hash.
+     *
+     * @return {WordArray} The hash.
+     *
+     * @static
+     *
+     * @example
+     *
+     *     var hash = CryptoJS.SHA512('message');
+     *     var hash = CryptoJS.SHA512(wordArray);
+     */
+    C.SHA512 = Hasher._createHelper(SHA512);
+
+    /**
+     * Shortcut function to the HMAC's object interface.
+     *
+     * @param {WordArray|string} message The message to hash.
+     * @param {WordArray|string} key The secret key.
+     *
+     * @return {WordArray} The HMAC.
+     *
+     * @static
+     *
+     * @example
+     *
+     *     var hmac = CryptoJS.HmacSHA512(message, key);
+     */
+    C.HmacSHA512 = Hasher._createHmacHelper(SHA512);
+}());
+
+</script>
+
+<script>
+
+// store the layouts
+var layoutStack = [];
+
+// go back to the previous layout
+function GoBack()
+{
+    if (layoutStack.length == 0)
+        return;
+    
+    var currentLayout = layoutStack.pop();
+    document.getElementById(currentLayout).style.display = "none";
+    
+    switch (currentLayout)
+    {
+        case "multi_setup":
+            multiCount = undefined;
+            multiExistingCount = undefined;
+            break;
+        case "decrypt":
+            var canvas = document.getElementById("decrypt_canvas");
+            var ctx = canvas.getContext("2d");
+            
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            break;
+        default:
+            break;
+    }
+    
+    if (layoutStack.length == 0)
+    {
+        document.getElementById("start_div").style.display = "";
+        return;
+    }
+    
+    var prevLayout = layoutStack[layoutStack.length - 1];
+    document.getElementById(prevLayout).style.display = "";
+}
+
+// show the decrypt layout
+function ShowDecrypt()
+{
+    document.getElementById("start_div").style.display = "none";
+    document.getElementById("decrypt").style.display = "";
+    layoutStack.push("decrypt");
+}
+
+// stuff for file loading
+var fileList = [];
+var fileCount = 0;
+var currentFileCount = 0;
+function FileImageLoaded(img)
+{
+    fileList.push(img);
+    ++currentFileCount;
+    if (currentFileCount == fileCount)
+    {
+        var canvas = document.getElementById("decrypt_canvas");
+        var ctx = canvas.getContext("2d", { alpha: false });
+        
+        var tempCanvas = document.getElementById("decrypt_canvas_temp");
+        var tempCtx = tempCanvas.getContext("2d", { alpha: false });
+        
+        canvas.width = img.width;
+        canvas.height = img.height;
+        tempCanvas.width = img.width;
+        tempCanvas.height = img.height;
+        
+        // load all images to imagedatas
+        var imageDatas = [];
+        for (var i = 0; i < fileCount; ++i)
+        {
+            var currentImage = fileList[i];
+            tempCtx.clearRect(0, 0, tempCanvas.width, tempCanvas.height);
+            tempCtx.drawImage(currentImage, 0, 0);
+            imageDatas.push(tempCtx.getImageData(0, 0, tempCanvas.width, tempCanvas.height));
+        }
+        
+        // calculate the difference between colors
+        var pixelData = imageDatas[0].data;
+        for (var i = 1; i < fileCount; ++i)
+        {
+            var currentImageData = imageDatas[i].data;
+            
+            for (var j = 0; j < pixelData.length; j += 4)
+            {
+                pixelData[j] = Math.abs(pixelData[j] - currentImageData[j]);
+                pixelData[j + 1] = Math.abs(pixelData[j + 1] - currentImageData[j + 1]);
+                pixelData[j + 2] = Math.abs(pixelData[j + 2] - currentImageData[j + 2]);
+            }
+        }
+        
+        // decrypted image
+        ctx.putImageData(imageDatas[0], 0, 0);
+    }
+}
+
+// when selecting image(s) for decryption
+function FilesSelected(files)
+{
+    fileList = [];
+    fileCount = files.length;
+    currentFileCount = 0;
+    for (var i = 0; i < files.length; ++i)
+    {
+        var fr = new FileReader();
+        fr.onload = function(event)
+        {
+            var img = new Image();
+            img.onload = function()
+            {
+                FileImageLoaded(img);
+            };
+            
+            img.src = event.target.result;
+        };
+        
+        fr.readAsDataURL(files[i]);
+    }
+}
+
+// show info for multi-revealers
+function ShowMultiInfo(isShow)
+{
+    document.getElementById("multi_info").style.display = isShow ? "" : "none";
+}
+
+// show multi-revealer setup layout
+function ShowMultiSetup()
+{
+    document.getElementById("start_div").style.display = "none";
+    document.getElementById("multi_setup").style.display = "";
+    
+    multiCount = 3;
+    multiExistingCount = 0;
+    document.getElementById("multi_count").value = "3";
+    document.getElementById("multi_existing_revealers").value = "";
+    UpdateMultiCount();
+    
+    storedSeed = undefined;
+    
+    layoutStack.push("multi_setup");
+}
+
+var multiCount = undefined;
+var multiExistingCount = undefined;
+function UpdateMultiCount()
+{
+    var multiButtonNew = document.getElementById("multi_button_new");
+    var multiButtonExisting = document.getElementById("multi_button_existing");
+    
+    if (isNaN(multiCount))
+    {
+        multiButtonNew.innerHTML = "Create ?? new revealers";
+        multiButtonExisting.innerHTML = "Create ?? new revealers and use the " + multiExistingCount + " revealer" + (multiExistingCount == 1 ? "" : "s") + " you entered";
+        return;
+    }
+    
+    var remainingCount = multiCount - multiExistingCount;
+    multiButtonNew.innerHTML = "Create " + multiCount + " new revealers";
+    
+    if (remainingCount > 0)
+    {
+        multiButtonExisting.innerHTML = "Create " + remainingCount + " new revealer" + (remainingCount == 1 ? "" : "s") +
+            ((multiExistingCount == 0) ?
+                " (you did not enter any revealers to use)" :
+                (" and use the " + multiExistingCount + " revealer" + (multiExistingCount == 1 ? "" : "s") + " you entered"));
+    }
+    else
+        multiButtonExisting.innerHTML = "Use the " + multiExistingCount + " revealer" + (multiExistingCount == 1 ? "" : "s") + " you entered"
+}
+
+function MultiCountChanged(target)
+{
+    var count = Number(target.value);
+    if (count < 3)
+        count = 3;
+    
+    if ((count & 1) != 1)
+        --count;
+    
+    multiCount = count;
+    UpdateMultiCount();
+}
+
+function MultiExistingChanged(target)
+{
+    var lines = target.value.split(/\n/g);
+    var count = 0;
+    for (var i = 0; i < lines.length; ++i)
+    {
+        if (lines[i].trim() != "")
+            ++count;
+    }
+    
+    multiExistingCount = count;
+    UpdateMultiCount();
+}
+
+var generateType = undefined;
+var multiExistingRevealers = [];
+// after setting up the parameters for multi-revealers
+function PreviewMultiRevealers(createNew)
+{
+    multiExistingRevealers = [];
+    
+    if (createNew)
+        generateType = "multi_new";
+    else
+    {
+        var errorTextDiv = document.getElementById("error_text_multi");
+        
+        var lines = document.getElementById("multi_existing_revealers").value.split(/\n/g);
+        for (var i = 0; i < lines.length; ++i)
+        {
+            if (lines[i].trim() != "")
+            {
+                var result = CheckRevealer(lines[i]);
+                if (typeof result == "string")
+                {
+                    errorTextDiv.innerHTML = "Invalid revealer at line " + (i + 1) + ": " + result;
+                    return;
+                }
+                
+                multiExistingRevealers.push(lines[i]);
+            }
+        }
+        
+        if ((multiExistingRevealers.length & 1) != 1)
+        {
+            errorTextDiv.innerHTML = "The number of revealers used must be odd";
+            return;
+        }
+        
+        generateType = "multi_existing";
+    }
+    
+    document.getElementById("multi_setup").style.display = "none";
+    document.getElementById("preview").style.display = "";
+    layoutStack.push("preview");
+}
+
+// when clicking on the start over button
+function Reset()
+{
+    document.getElementById("result").style.display = "none";
+    document.getElementById("start_div").style.display = "";
+    document.getElementById("error_text").innerHTML = "&nbsp;";
+    document.getElementById("revealer_id_input").value = "";
+    document.getElementById("textarea").value = "";
+    TextChanged();
+    
+    storedSeed = undefined;
+    
+    multiCount = undefined;
+    multiExistingCount = undefined;
+    
+    layoutStack = [];
+    
+    document.getElementById("result_container").innerHTML = "";
+}
+
+function HexStringToWordArray(str)
+{
+    return CryptoJS.enc.Hex.parse(str);
+}
+
+var secret_key;
+var secret_val;
+
+function Init(seed)
+{
+    // initial values
+    secret_key = "00".repeat(64);
+    secret_val = "01".repeat(64);
+    
+    var finalSeed;
+    if (seed)
+    {
+        // convert seed
+        seed = seed.replace(/\s+/g, "").toLowerCase();
+        if (seed.length < 36)
+            return "Revealer ID is too short";
+        
+        var version = seed[0];
+        if (version != "1")
+            return "Only version 1 revealers are supported (they start with 1)";
+        
+        var hexSeed = seed.slice(0, -3);
+        var checksum = seed.substr(-3); // checksum given by the user
+        // the input of the sha256 is an utf8 string here, not bytes
+        var actualChecksum = CryptoJS.SHA256(hexSeed).toString(CryptoJS.enc.Hex).substr(-3); // checksum calculated from the given data
+        
+        if (checksum != actualChecksum)
+            return "Invalid checksum";
+        
+        finalSeed = hexSeed.substr(1) + version + actualChecksum; // the final seed is in this order
+    }
+    else
+    {
+        // no seed provided, generate a new one
+        var randomBytes = crypto.getRandomValues(new Uint8Array(16));
+        seed = "";
+        for (var i = 0; i < randomBytes.length; ++i)
+            seed += randomBytes[i].toString(16).padStart(2, "0"); // convert to hex string
+        
+        var version = "1";
+        // the input of the sha256 is an utf8 string here, not bytes
+        var checksum = CryptoJS.SHA256(version + seed).toString(CryptoJS.enc.Hex).substr(-3);
+        
+        finalSeed = (seed + version + checksum).toLowerCase(); // the final seed is in this order
+        
+        storedSeed = (version + seed + checksum).toUpperCase().match(/..../g).join(" ");
+    }
+    
+    secret_key = HMAC(secret_key, secret_val + "00" + finalSeed);
+    secret_val = HMAC(secret_key, secret_val);
+    secret_key = HMAC(secret_key, secret_val + "01" + finalSeed);
+    secret_val = HMAC(secret_key, secret_val);
+}
+
+function HMAC(key, val)
+{
+    return CryptoJS.HmacSHA512(HexStringToWordArray(val), HexStringToWordArray(key)).toString(CryptoJS.enc.Hex);
+}
+
+function Generate(count)
+{
+    // generate "count" bytes, so the hex string is double of that length
+    var requiredLength = count * 2;
+    ret = "";
+    while (ret.length < requiredLength)
+    {
+        secret_val = HMAC(secret_key, secret_val);
+        ret += secret_val;
+    }
+    
+    if (ret.length > requiredLength)
+        ret = ret.substr(0, requiredLength);
+    
+    return ret;
+}
+
+function CheckRevealer(seed)
+{
+    seed = seed.replace(/\s+/g, "").toLowerCase();
+    if (seed.length < 36)
+        return "Revealer ID is too short";
+    
+    var version = seed[0];
+    if (version != "1")
+        return "Only version 1 revealers are supported (they start with 1)";
+    
+    var hexSeed = seed.slice(0, -3);
+    var checksum = seed.substr(-3); // checksum given by the user
+    // the input of the sha256 is an utf8 string here, not bytes
+    var actualChecksum = CryptoJS.SHA256(hexSeed).toString(CryptoJS.enc.Hex).substr(-3); // checksum calculated from the given data
+    
+    if (checksum != actualChecksum)
+        return "Invalid checksum";
+}
+
+var storedSeed = undefined;
+function EncryptWithRevealer(isNew)
+{
+    var errorTextDiv = document.getElementById("error_text");
+    if (isNew)
+    {
+        storedSeed = undefined;
+        document.getElementById("preview_text").innerHTML = "Enter your text to encrypt:";
+        generateType = "single_new";
+    }
+    else
+    {
+        var seed = document.getElementById("revealer_id_input").value;
+        var result = CheckRevealer(seed);
+        if (typeof result == "string")
+        {
+            errorTextDiv.innerHTML = result;
+            return;
+        }
+        
+        storedSeed = seed.replace(/\s+/g, "").toUpperCase().match(/..../g).join(" ");
+        document.getElementById("preview_text").innerHTML = "Revealer OK<br>Enter your text to encrypt:";
+        generateType = "single_existing";
+    }
+    
+    errorTextDiv.innerHTML = "&nbsp;";
+    document.getElementById("start_div").style.display = "none";
+    document.getElementById("preview").style.display = "";
+    
+    document.getElementById("textarea").value = "";
+    TextChanged();
+    
+    layoutStack.push("preview");
+}
+
+function GetRevealerNoiseBits(seed)
+{
+    var result = Init(seed);
+    if (typeof result == "string")
+    {
+        // should not happen, already checked before
+        throw new Error();
+    }
+    
+    // these values are used by default
+    var dataWidth = 159;
+    var dataHeight = 97;
+    
+    var totalByteCount = Math.ceil(dataWidth * dataHeight / 8); // calculate byte count from the given data width and height
+    var noiseBytes = Generate(totalByteCount); // generate that much bytes
+
+    var noiseBits = [];
+
+    // convert the bytes to bits
+    for (var i = 0; i < totalByteCount * 2; i += 2)
+    {
+        var currentByte = Number.parseInt(noiseBytes.substr(i, 2), 16);
+        for (var j = 0; j < 8; ++j)
+            noiseBits.push(Boolean((currentByte >> (7 - j)) & 1));
+    }
+    
+    return noiseBits;
+}
+
+function CreateRevealer(pixels, text)
+{   
+    // these values are used by revealer
+    var dataWidth = 159;
+    var dataHeight = 97;
+
+    // size of each black and white square in the final image
+    var scale = 6;
+    // 5 width border
+    var border = 10;
+    var borderSizeInPixels = border * scale;
+    var width = (dataWidth + border) * scale * 2; // final width in pixels
+    var height = (dataHeight + border) * scale * 2; // final height in pixels
+
+    var canvas = document.createElement("canvas");
+    var ctx = canvas.getContext("2d");
+    canvas.width = width;
+    canvas.height = height;
+    
+    ctx.fillStyle = "#ffffff";
+    ctx.fillRect(0, 0, width, height);
+    ctx.fillStyle = "#000000";
+
+    for (var y = 0; y < dataHeight; ++y)
+    {
+        for (var x = 0; x < dataWidth; ++x)
+        {
+            // value of the current bit
+            var current = pixels[x * dataHeight + y];
+            
+            // each bit is converted to 4 squares
+            for (var addY = 0; addY < 2; ++addY)
+            {
+                for (var addX = 0; addX < 2; ++addX)
+                {
+                    if (current != (addX == addY))
+                        ctx.fillRect(borderSizeInPixels + x * scale * 2 + addX * scale,
+                                     borderSizeInPixels + y * scale * 2 + addY * scale,
+                                     scale, scale); // fill with black if needed
+                }
+            }
+        }
+    }
+    
+    // draw borders
+    ctx.strokeStyle = "#000000";
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    
+    ctx.moveTo(borderSizeInPixels, 0);
+    ctx.lineTo(borderSizeInPixels, height);
+    
+    ctx.moveTo(width - borderSizeInPixels, 0);
+    ctx.lineTo(width - borderSizeInPixels, height);
+    
+    ctx.moveTo(0, borderSizeInPixels);
+    ctx.lineTo(width, borderSizeInPixels);
+    
+    ctx.moveTo(0, height - borderSizeInPixels);
+    ctx.lineTo(width, height - borderSizeInPixels);
+    
+    ctx.moveTo(width / 2, 0);
+    ctx.lineTo(width / 2, borderSizeInPixels);
+    
+    ctx.moveTo(width / 2, height - borderSizeInPixels);
+    ctx.lineTo(width / 2, height);
+    
+    ctx.moveTo(0, height / 2);
+    ctx.lineTo(borderSizeInPixels, height / 2);
+    
+    ctx.moveTo(width - borderSizeInPixels, height / 2);
+    ctx.lineTo(width, height / 2);
+    
+    ctx.stroke();
+    
+    // dashed lines
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.setLineDash([8, 4, 2, 4, 2, 4]);
+    
+    ctx.moveTo(borderSizeInPixels / 2, 0);
+    ctx.lineTo(borderSizeInPixels / 2, height);
+    
+    ctx.moveTo(width - borderSizeInPixels / 2, 0);
+    ctx.lineTo(width - borderSizeInPixels / 2, height);
+    
+    ctx.moveTo(0, borderSizeInPixels / 2);
+    ctx.lineTo(width, borderSizeInPixels / 2);
+    
+    ctx.moveTo(0, height - borderSizeInPixels / 2);
+    ctx.lineTo(width, height - borderSizeInPixels / 2);
+    
+    ctx.stroke();
+    
+    // draw text if any
+    if (text)
+    {
+        ctx.font = "bold " + (borderSizeInPixels * 0.75) + "px RobotoMono";
+        ctx.textBaseline = "bottom";
+        ctx.textAlign = "right";
+        
+        var textWidth = ctx.measureText(text).width;
+        
+        ctx.fillStyle = "#ffffff";
+        ctx.fillRect(width - textWidth - borderSizeInPixels * 2 - borderSizeInPixels * 0.1,
+                     height - borderSizeInPixels + borderSizeInPixels * 0.1,
+                     textWidth + borderSizeInPixels * 0.2, borderSizeInPixels * 0.8);
+        
+        ctx.fillStyle = "#000000";
+        
+        ctx.fillText(text, width - borderSizeInPixels * 2, height - borderSizeInPixels * 0.05);
+    }
+    
+    return canvas;
+}
+
+// display the results
+function SetResultCanvases(list)
+{
+    var resultContainer = document.getElementById("result_container");
+    resultContainer.innerHTML = "";
+    
+    for (var i = 0; i < list.length; ++i)
+    {
+        var current = list[i];
+        var container = document.createElement("div");
+        var text = document.createElement("div");
+        text.style = "font-size: 20px; margin-top: 10px; margin-bottom: 5px;";
+        text.innerHTML = (i == list.length - 1) ? "Encrypted secret:" : (list.length == 2 ? "Revealer:" : ("Revealer " + (i + 1) + ":"));
+        container.appendChild(text);
+        container.appendChild(current);
+        current.style = "width: 1014px; height: 642px;";
+        resultContainer.appendChild(container);
+    }
+}
+
+// create a revealer
+function Create()
+{
+    var pixels = [];
+    var canvas = document.getElementById("preview_canvas");
+    var w = canvas.width;
+    var h = canvas.height;
+    var imageData = canvas.getContext("2d").getImageData(0, 0, w, h).data;
+    
+    for (var x = 0; x < w; ++x)
+    {
+        for (var y = 0; y < h; ++y)
+        {
+            pixels.push(imageData[(y * w + x) * 4] == 0);
+        }
+    }
+    
+    document.getElementById("preview").style.display = "none";
+    document.getElementById("result").style.display = "";
+    layoutStack.push("result");
+    
+    switch (generateType)
+    {
+        case "single_new": // create a new revealer
+            var noiseBits = GetRevealerNoiseBits();
+            var encryptedBits = new Array(noiseBits.length);
+            
+            for (var i = 0; i < noiseBits.length; ++i)
+                encryptedBits[i] = noiseBits[i] == pixels[i];
+            
+            SetResultCanvases([CreateRevealer(noiseBits, storedSeed), CreateRevealer(encryptedBits, storedSeed[0] + "_" + storedSeed.substr(-3))]);
+            break;
+        case "single_existing": // encrypt a secret with an existing revealer
+            var noiseBits = GetRevealerNoiseBits(storedSeed);
+            var encryptedBits = new Array(noiseBits.length);
+            
+            for (var i = 0; i < noiseBits.length; ++i)
+                encryptedBits[i] = noiseBits[i] == pixels[i];
+            
+            SetResultCanvases([CreateRevealer(noiseBits, storedSeed), CreateRevealer(encryptedBits, storedSeed[0] + "_" + storedSeed.substr(-3))]);
+            break;
+        case "multi_new": // create a new multi-revealer
+            var newRevealers = [];
+            var seeds = [];
+            for (var i = 0; i < multiCount; ++i)
+            {
+                newRevealers.push(GetRevealerNoiseBits());
+                seeds.push(storedSeed);
+            }
+            
+            var combined = newRevealers[0].slice();
+            for (var i = 1; i < newRevealers.length; ++i)
+            {
+                var current = newRevealers[i];
+                for (var j = 0; j < current.length; ++j)
+                    combined[j] = combined[j] != current[j];
+            }
+            
+            var finalCanvases = [];
+            for (var i = 0; i < newRevealers.length; ++i)
+                finalCanvases.push(CreateRevealer(newRevealers[i], seeds[i]));
+            
+            var encrypted = new Array(pixels.length);
+            for (var i = 0; i < pixels.length; ++i)
+                encrypted[i] = pixels[i] == combined[i];
+            
+            finalCanvases.push(CreateRevealer(encrypted));
+            
+            SetResultCanvases(finalCanvases);
+            break;
+        case "multi_existing": // create a new multi-revealer with some revealers already provided
+            var allRevealers = [];
+            var seeds = [];
+            for (var i = 0; i < multiExistingCount; ++i)
+            {
+                var currentRevealerSeed = multiExistingRevealers[i];
+                allRevealers.push(GetRevealerNoiseBits(currentRevealerSeed));
+                seeds.push(currentRevealerSeed.replace(/\s+/g, "").toUpperCase().match(/..../g).join(" "));
+            }
+            
+            for (var i = multiExistingCount; i < multiCount; ++i)
+            {
+                allRevealers.push(GetRevealerNoiseBits());
+                seeds.push(storedSeed);
+            }
+            
+            var combined = allRevealers[0].slice();
+            for (var i = 1; i < allRevealers.length; ++i)
+            {
+                var current = allRevealers[i];
+                for (var j = 0; j < current.length; ++j)
+                    combined[j] = combined[j] != current[j];
+            }
+            
+            var finalCanvases = [];
+            for (var i = 0; i < allRevealers.length; ++i)
+                finalCanvases.push(CreateRevealer(allRevealers[i], seeds[i]));
+            
+            var encrypted = new Array(pixels.length);
+            for (var i = 0; i < pixels.length; ++i)
+                encrypted[i] = pixels[i] == combined[i];
+            
+            finalCanvases.push(CreateRevealer(encrypted));
+            
+            SetResultCanvases(finalCanvases);
+            break;
+        default:
+            break;
+    }
+}
+
+var TextChanged;
+(function()
+{
+var canvas = document.getElementById("preview_canvas");
+var ctx = canvas.getContext("2d");
+var revealerWidth = 159;
+var revealerHeight = 97;
+canvas.width = revealerWidth;
+canvas.height = revealerHeight;
+ctx.fillStyle = "white";
+ctx.fillRect(0, 0, revealerWidth, revealerHeight);
+
+// text style controller elements
+var textarea = document.getElementById("textarea");
+var fontsize_slider = document.getElementById("fontsize_slider");
+var lineheight_slider = document.getElementById("lineheight_slider");
+var alpha_slider = document.getElementById("alpha_slider");
+var fontfamily_input = document.getElementById("fontfamily_input");
+var letterspacing_slider = document.getElementById("letterspacing_slider");
+var font_italic = document.getElementById("font_italic");
+var font_weight_selector = document.getElementById("font_weight_selector");
+var word_wrap = document.getElementById("word_wrap");
+var border_top_size = document.getElementById("border_top_size");
+var border_side_size = document.getElementById("border_side_size");
+
+TextChanged = function()
+{
+    // set text style
+    canvas.style.letterSpacing = (letterspacing_slider.value / 10) + "px";
+    ctx.font = (font_italic.checked ? "italic " : "") +
+               (font_weight_selector.checked ? "bold " : "") +
+               (fontsize_slider.value / 10) + "px " + fontfamily_input.value;
+    ctx.textBaseline = "top"; 
+    
+    var borderSizeTop = +border_top_size.value;
+    var borderSizeSide = +border_side_size.value;
+    
+    var lines;
+    if (word_wrap.checked)
+    {
+        var words = textarea.value.split(/\s+/);
+        var total = words.length;
+        var count = 1;
+        lines = [];
+        var index = 0;
+        while (index + count <= total)
+        {
+            var line;
+            while (index + count <= total)
+            {
+                line = words.slice(index, index + count).join(" ");
+                if (ctx.measureText(line).width + 2 * borderSizeSide > revealerWidth)
+                {
+                    --count;
+                    if (count == 0)
+                        count = 1;
+                    
+                    line = words.slice(index, index + count).join(" ");
+                    break;
+                }
+                ++count;
+            }
+            
+            index += count;
+            count = 1;
+            lines.push(line);
+        }
+    }
+    else
+        lines = textarea.value.split("\n");
+    
+    ctx.fillStyle = "white";
+    ctx.fillRect(0, 0, revealerWidth, revealerHeight);
+    ctx.fillStyle = "black";
+    
+    var lineHeight = lineheight_slider.value / 10;
+    for (var i = 0; i < lines.length; ++i)
+        ctx.fillText(lines[i], borderSizeSide, borderSizeTop + lineHeight * i);
+    
+    // alpha threshold
+    var imageData = ctx.getImageData(0, 0, revealerWidth, revealerHeight);
+    var imageDataData = imageData.data;
+    var clipThreshold = alpha_slider.value * 3;
+    
+    for (var i = 0; i < imageDataData.length; i += 4)
+    {
+        var val = imageDataData[i] + imageDataData[i + 1] + imageDataData[i + 2];
+        if (val > clipThreshold)
+        {
+            imageDataData[i] = 255;
+            imageDataData[i + 1] = 255;
+            imageDataData[i + 2] = 255;
+        }
+        else
+        {
+            imageDataData[i] = 0;
+            imageDataData[i + 1] = 0;
+            imageDataData[i + 2] = 0;
+        }
+    }
+    
+    ctx.putImageData(imageData, 0, 0);
+}
+})();
+
+</script>
+</body>
+</html>
